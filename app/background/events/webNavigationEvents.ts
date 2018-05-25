@@ -8,3 +8,43 @@ chrome.webNavigation.onBeforeNavigate.addListener(function ({ tabId, url, frameI
   const isMainFrame: boolean = frameId === 0
   actions.onBeforeNavigate(tabId, url, isMainFrame)
 })
+
+
+let blockAd = () => {
+  console.log('blockAd() called');
+}
+
+let reportPage = () => {
+  console.log('reportPage() called')
+}
+
+// chrome.contextMenus.create takes 2 parameters, an object defining properties of the context menu, and a callback function.
+
+chrome.contextMenus.create({
+  title: 'Brave',
+  id: 'brave',
+  contexts:['all']
+}, () => {
+  console.log('Brave parent menu created')
+});
+
+// define sub context menus
+
+chrome.contextMenus.create({
+  title: 'Block custom ad',
+  parentId: 'brave',
+  contexts:['all'],
+  onclick: blockAd
+}, () => {
+  console.log('block custom ad sub-context menu created')
+});
+
+chrome.contextMenus.create({
+  title: 'Report broken page',
+  parentId: 'brave',
+  contexts:['all'],
+  onclick: reportPage
+}, () => {
+  console.log('report broken page sub-context menu created')
+});
+
