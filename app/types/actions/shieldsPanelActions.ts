@@ -5,6 +5,14 @@
 import * as types from '../constants/shieldsPanelTypes'
 import { BlockTypes, BlockOptions, BlockFPOptions, BlockCookiesOptions } from '../other/blockTypes'
 
+interface TestToggledReturn {
+  type: types.TEST_TOGGLED
+}
+
+export interface TestToggled {
+  (): TestToggledReturn
+}
+
 export interface ShieldDetails {
   id: number
   ads: BlockOptions
@@ -121,6 +129,7 @@ export interface ChangeNoScriptSettings {
 }
 
 export type shieldPanelActions =
+  TestToggledReturn |
   ShieldsPanelDataUpdatedReturn |
   ShieldsToggledReturn |
   ResourceBlockedReturn |

@@ -16,7 +16,8 @@ import {
   setAllowCookies,
   toggleShieldsValue,
   requestShieldPanelData,
-  setAllowScriptOriginsOnce
+  setAllowScriptOriginsOnce,
+  setAllowTest
 } from '../api/shieldsAPI'
 import { setBadgeText } from '../api/badgeAPI'
 import { reloadTab } from '../api/tabsAPI'
@@ -164,6 +165,22 @@ export default function shieldsPanelReducer (state: State = { tabs: {}, windows:
           })
           .catch(() => {
             console.error('Could not set JavaScript setting')
+          })
+        break
+      }
+    case shieldsPanelTypes.TEST_TOGGLED:
+      {
+        const tabData: Tab = shieldsPanelState.getActiveTabData(state)
+        console.log(`setting tabData.test to ${!tabData.test}`)
+        setAllowTest(tabData.origin, toggleShieldsValue(tabData.test))
+          .then(() => {
+            requestShieldPanelData(shieldsPanelState.getActiveTabId(state))
+            // reloadTab(tabData.id, true).catch(() => {
+            //   console.error('Tab reload was not successful')
+            // })
+          })
+          .catch(() => {
+            console.error('Could not set test toggle setting')
           })
         break
       }

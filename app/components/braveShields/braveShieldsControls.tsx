@@ -28,6 +28,9 @@ export interface Props {
   noScriptInfo: NoScriptInfo
   allowScriptOriginsOnce: shieldActions.AllowScriptOriginsOnce
   changeNoScriptSettings: shieldActions.ChangeNoScriptSettings
+
+  test: BlockOptions
+  testToggled: shieldActions.TestToggled
 }
 
 export default class BraveShieldsControls extends React.Component<Props, Object> {
@@ -41,6 +44,11 @@ export default class BraveShieldsControls extends React.Component<Props, Object>
     this.onChangeCookiesProtection = this.onChangeCookiesProtection.bind(this)
     this.onAllowScriptOriginsOnce = this.onAllowScriptOriginsOnce.bind(this)
     this.onChangeNoScriptSettings = this.onChangeNoScriptSettings.bind(this)
+    this.onToggleTest = this.onToggleTest.bind(this)
+  }
+
+  onToggleTest () {
+    this.props.testToggled()
   }
 
   onChangeAdControl (e: HTMLSelectElement) {
@@ -76,7 +84,7 @@ export default class BraveShieldsControls extends React.Component<Props, Object>
   }
 
   render () {
-    const { braveShields, ads, trackers, controlsOpen, httpUpgradableResources, javascript, fingerprinting, cookies, noScriptInfo } = this.props
+    const { braveShields, ads, trackers, controlsOpen, httpUpgradableResources, javascript, fingerprinting, cookies, noScriptInfo, test } = this.props
     return (
       <Grid
         id='braveShieldsControls'
@@ -145,6 +153,15 @@ export default class BraveShieldsControls extends React.Component<Props, Object>
                   rightText={getMessage('shieldsControlsBlockScriptsSwitch')}
                   checked={braveShields !== 'block' && javascript !== 'allow'}
                   onChange={this.onToggleJavaScript}
+                />
+              </Column>
+              <Column>
+                <SwitchButton
+                  id='test'
+                  disabled={braveShields === 'block'}
+                  rightText={`testToggle: ${this.props.test}`}
+                  checked={braveShields !== 'block' && test !== 'allow'}
+                  onChange={this.onToggleTest}
                 />
               </Column>
               <Column>

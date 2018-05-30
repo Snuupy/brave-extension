@@ -21,6 +21,7 @@ interface Props {
     blockCookies: shieldActions.BlockCookies
     allowScriptOriginsOnce: shieldActions.AllowScriptOriginsOnce
     changeNoScriptSettings: shieldActions.ChangeNoScriptSettings
+    testToggled: shieldActions.TestToggled
   }
   shieldsPanelTabData: Tab
 }
@@ -66,6 +67,9 @@ export default class BraveShields extends React.Component<Props, object> {
           noScriptInfo={shieldsPanelTabData.noScriptInfo}
           allowScriptOriginsOnce={actions.allowScriptOriginsOnce}
           changeNoScriptSettings={actions.changeNoScriptSettings}
+
+          test={shieldsPanelTabData.test}
+          testToggled={actions.testToggled}
         />
         <BraveShieldsFooter />
       </div>

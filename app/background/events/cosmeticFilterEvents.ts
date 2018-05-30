@@ -47,13 +47,9 @@
 //   console.log('report broken page sub-context menu created')
 // });
 
-
-
-
-
 // chrome.contextMenus.create({
-//   title: ': %s', 
-//   contexts:['all'], 
+//   title: ': %s',
+//   contexts:['all'],
 //   onclick: getword,
 // });
 
@@ -79,4 +75,3 @@
 // }, () => {
 //   console.log('Brave context menu created')
 // })
-
