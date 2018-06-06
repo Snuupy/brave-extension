@@ -123,6 +123,16 @@ export const getMockChrome = () => {
             setting: 'block'
           })
         }
+      },
+      test: {
+        setAsync: function () {
+          return Promise.resolve()
+        },
+        getAsync: function () {
+          return Promise.resolve({
+            setting: 'block'
+          })
+        }
       }
     },
     i18n: {

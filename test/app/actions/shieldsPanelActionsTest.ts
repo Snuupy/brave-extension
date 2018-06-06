@@ -50,6 +50,12 @@ describe('shieldsPanelActions', () => {
     })
   })
 
+  it('testToggled action', () => {
+    assert.deepEqual(actions.testToggled(), {
+      type: types.TEST_TOGGLED
+    })
+  })
+
   it('resourceBlocked action', () => {
     const details: BlockDetails = {
       blockType: 'ads',

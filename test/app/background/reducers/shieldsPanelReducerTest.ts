@@ -371,6 +371,23 @@ describe('braveShieldsPanelReducer', () => {
     })
   })
 
+  // describe('TEST_TOGGLED', function () {
+  //   before(function () {
+  //     this.reloadTabSpy = sinon.spy(tabsAPI, 'reloadTab')
+  //     this.setAllowTestSpy = sinon.spy(shieldsAPI, 'setAllowTest')
+  //   })
+  //   after(function () {
+  //      this.setAllowTestSpy.restore()
+  //   })
+  //   it('should call setAllowTest', function () {
+  //     assert.deepEqual(
+  //       shieldsPanelReducer(state, {
+  //         type: types.TEST_TOGGLED
+  //       }), state)
+  //     assert.equal(this.setAllowTestToggle.Spy.withArgs(origin, 'allow').calledOnce, true)
+  //   })
+  // })
+
   describe('BLOCK_FINGERPRINTING', function () {
     before(function () {
       this.reloadTabSpy = sinon.spy(tabsAPI, 'reloadTab')
