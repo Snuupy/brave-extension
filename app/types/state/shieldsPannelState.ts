@@ -24,6 +24,8 @@ export interface Tab {
   fingerprintingBlocked: number
   cookies: BlockCookiesOptions
   noScriptInfo: NoScriptInfo
+  test: BlockOptions
+  testToggled: boolean
 }
 
 export interface Tabs {

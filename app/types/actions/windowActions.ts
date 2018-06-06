@@ -31,7 +31,16 @@ export interface WindowRemoved {
   (windowId: number): WindowRemovedReturn
 }
 
+// interface ContextMenuClicked {
+//   type: types.CONTEXT_MENU_CLICKED,
+//   windowId: number
+// }
+// export interface ContextMenuClicked {
+//   (windowId: number): ContextMenuClickedReturn
+// }
+
 export type windowActions =
   WindowFocusChangedReturn |
   WindowCreatedReturn |
   WindowRemovedReturn
+  // | ContextMenuClicked

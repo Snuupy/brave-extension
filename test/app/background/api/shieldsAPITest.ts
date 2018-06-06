@@ -46,7 +46,8 @@ describe('Shields API', () => {
           braveShields: 'block',
           fingerprinting: 'block',
           cookies: 'block',
-          id: 5
+          id: 5,
+          test: 'block'
         })
         cb()
       })
@@ -101,7 +102,8 @@ describe('Shields API', () => {
         httpUpgradableResources: 'block',
         javascript: 'block',
         fingerprinting: 'block',
-        cookies: 'block'
+        cookies: 'block',
+        test: 'block'
       }
 
       this.p

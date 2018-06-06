@@ -16,3 +16,7 @@ export const windowCreated: actions.WindowCreated = (window) => {
 export const windowRemoved: actions.WindowRemoved = (windowId) => {
   return { type: types.WINDOW_REMOVED, windowId }
 }
+
+// export const contextMenuClick: actions.ContextMenuClicked = (windowId) => {
+// 	return { type: types.CONTEXT_MENU_CLICKED, windowId}
+// }
