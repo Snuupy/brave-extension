@@ -164,14 +164,12 @@ export const setAllowJavaScript = (origin: string, setting: string) =>
  * @return a promise which resolves when the setting is set
  */
 
-export const setAllowTest = (origin: string, setting: string) => {
-  console.log(origin, setting)
-  return chrome.contentSettings.plugins.setAsync({
+export const setAllowTest = (origin: string, setting: string) =>
+  chrome.contentSettings.javascript.setAsync({
     primaryPattern: origin + '/*',
     resourceIdentifier: { id: resourceIdentifiers.RESOURCE_TEST },
     setting
   })
-}
 
 /**
  * Changes the fingerprinting at origin to be allowed or blocked.

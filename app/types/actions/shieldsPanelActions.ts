@@ -111,7 +111,6 @@ export interface TestToggled {
   (): TestToggledReturn
 }
 
-
 interface AllowScriptOriginsOnceReturn {
   type: types.ALLOW_SCRIPT_ORIGINS_ONCE,
   origins: string[]
