@@ -20,6 +20,8 @@ export const getShieldSettingsForTabData = (tabData?: chrome.tabs.Tab) => {
   const origin = url.origin
   const hostname = url.hostname
 
+  // an array containing all the settings of the shields API
+
   return Promise.all([
     chrome.contentSettings.plugins.getAsync({ primaryUrl: origin, resourceIdentifier: { id: resourceIdentifiers.RESOURCE_IDENTIFIER_BRAVE_SHIELDS } }),
     chrome.contentSettings.plugins.getAsync({ primaryUrl: origin, resourceIdentifier: { id: resourceIdentifiers.RESOURCE_IDENTIFIER_ADS } }),
@@ -29,8 +31,12 @@ export const getShieldSettingsForTabData = (tabData?: chrome.tabs.Tab) => {
     chrome.contentSettings.plugins.getAsync({ primaryUrl: origin, resourceIdentifier: { id: resourceIdentifiers.RESOURCE_IDENTIFIER_FINGERPRINTING } }),
     chrome.contentSettings.plugins.getAsync({ primaryUrl: origin, secondaryUrl: 'https://firstParty/*', resourceIdentifier: { id: resourceIdentifiers.RESOURCE_IDENTIFIER_FINGERPRINTING } }),
     chrome.contentSettings.plugins.getAsync({ primaryUrl: origin, resourceIdentifier: { id: resourceIdentifiers.RESOURCE_IDENTIFIER_COOKIES } }),
-    chrome.contentSettings.plugins.getAsync({ primaryUrl: origin, secondaryUrl: 'https://firstParty/', resourceIdentifier: { id: resourceIdentifiers.RESOURCE_IDENTIFIER_COOKIES } })
+    chrome.contentSettings.plugins.getAsync({ primaryUrl: origin, secondaryUrl: 'https://firstParty/', resourceIdentifier: { id: resourceIdentifiers.RESOURCE_IDENTIFIER_COOKIES } }),
+    chrome.contentSettings.plugins.getAsync({ primaryUrl: origin, resourceIdentifier: { id: resourceIdentifiers.RESOURCE_TEST } })
   ]).then((details) => {
+
+    // needs to grab the variables accordingly
+    console.log(details)
     const fingerprinting = details[5].setting !== details[6].setting ? 'block_third_party' : details[5].setting
     const cookies = details[7].setting !== details[8].setting ? 'block_third_party' : details[7].setting
     return {
@@ -44,7 +50,8 @@ export const getShieldSettingsForTabData = (tabData?: chrome.tabs.Tab) => {
       httpUpgradableResources: details[3].setting,
       javascript: details[4].setting,
       fingerprinting,
-      cookies
+      cookies,
+      test: details[9].setting
     }
   }).catch(() => {
     return {
@@ -56,7 +63,8 @@ export const getShieldSettingsForTabData = (tabData?: chrome.tabs.Tab) => {
       trackers: 0,
       httpUpgradableResources: 0,
       javascript: 0,
-      fingerprinting: 0
+      fingerprinting: 0,
+      test: 0
     }
   })
 }
@@ -148,6 +156,22 @@ export const setAllowJavaScript = (origin: string, setting: string) =>
     primaryPattern: origin + '/*',
     setting
   })
+
+/**
+ * Changes the test toggle to be on or off
+ * @param {string} origin the origin of the site to change the setting for
+ * @param {string} setting 'on' or 'off'
+ * @return a promise which resolves when the setting is set
+ */
+
+export const setAllowTest = (origin: string, setting: string) => {
+  console.log(origin, setting)
+  return chrome.contentSettings.plugins.setAsync({
+    primaryPattern: origin + '/*',
+    resourceIdentifier: { id: resourceIdentifiers.RESOURCE_TEST },
+    setting
+  })
+}
 
 /**
  * Changes the fingerprinting at origin to be allowed or blocked.

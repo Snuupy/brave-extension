@@ -255,7 +255,9 @@ describe('shieldsPanelState test', () => {
             origin: 'https://brave.com',
             braveShields: 'block',
             url: 'https://brave.com',
-            noScriptInfo: {}
+            noScriptInfo: {},
+            test: 'block',
+            testToggled: false
           },
           3: {
             ads: 'block',
@@ -275,7 +277,9 @@ describe('shieldsPanelState test', () => {
             cookies: 'block',
             fingerprintingBlocked: 0,
             url: 'https://brave.com',
-            noScriptInfo: {}
+            noScriptInfo: {},
+            test: 'block',
+            testToggled: false
           },
           4: {
             ads: 'block',
@@ -295,7 +299,9 @@ describe('shieldsPanelState test', () => {
             cookies: 'block',
             fingerprintingBlocked: 0,
             url: 'https://brave.com',
-            noScriptInfo: {}
+            noScriptInfo: {},
+            test: 'block',
+            testToggled: false
           }
         },
         windows: {
@@ -330,7 +336,9 @@ describe('shieldsPanelState test', () => {
             origin: 'https://brave.com',
             braveShields: 'block',
             url: 'https://brave.com',
-            noScriptInfo: {}
+            noScriptInfo: {},
+            test: 'block',
+            testToggled: false
           },
           3: {
             ads: 'block',
@@ -350,7 +358,9 @@ describe('shieldsPanelState test', () => {
             cookies: 'block',
             fingerprintingBlocked: 0,
             url: 'https://brave.com',
-            noScriptInfo: {}
+            noScriptInfo: {},
+            test: 'block',
+            testToggled: false
           },
           4: {
             ads: 'block',
@@ -370,7 +380,9 @@ describe('shieldsPanelState test', () => {
             cookies: 'block',
             fingerprintingBlocked: 0,
             url: 'https://brave.com',
-            noScriptInfo: {}
+            noScriptInfo: {},
+            test: 'block',
+            testToggled: false
           }
         },
         windows: {
@@ -402,7 +414,9 @@ describe('shieldsPanelState test', () => {
             cookies: 'block',
             fingerprintingBlocked: 0,
             url: 'https://brave.com',
-            noScriptInfo: {}
+            noScriptInfo: {},
+            test: 'block',
+            testToggled: false
           },
           3: {
             ads: 'block',
@@ -422,7 +436,9 @@ describe('shieldsPanelState test', () => {
             cookies: 'block',
             fingerprintingBlocked: 0,
             url: 'https://brave.com',
-            noScriptInfo: {}
+            noScriptInfo: {},
+            test: 'block',
+            testToggled: false
           },
           4: {
             ads: 'block',
@@ -442,7 +458,9 @@ describe('shieldsPanelState test', () => {
             cookies: 'block',
             fingerprintingBlocked: 5,
             url: 'https://brave.com',
-            noScriptInfo: {}
+            noScriptInfo: {},
+            test: 'block',
+            testToggled: false
           }
         },
         windows: {
@@ -472,7 +490,9 @@ describe('shieldsPanelState test', () => {
             cookies: 'block',
             fingerprintingBlocked: 0,
             url: 'https://brave.com',
-            noScriptInfo: {}
+            noScriptInfo: {},
+            test: 'block',
+            testToggled: false
           },
           3: {
             ads: 'block',
@@ -492,7 +512,9 @@ describe('shieldsPanelState test', () => {
             cookies: 'block',
             fingerprintingBlocked: 0,
             url: 'https://brave.com',
-            noScriptInfo: {}
+            noScriptInfo: {},
+            test: 'block',
+            testToggled: false
           },
           4: {
             ads: 'block',
@@ -512,7 +534,9 @@ describe('shieldsPanelState test', () => {
             cookies: 'block',
             fingerprintingBlocked: 0,
             url: 'https://brave.com',
-            noScriptInfo: {}
+            noScriptInfo: {},
+            test: 'block',
+            testToggled: false
           }
         },
         windows: {
@@ -650,7 +674,9 @@ describe('shieldsPanelState test', () => {
           noScriptInfo: {
             'https://a.com': { actuallyBlocked: true, willBlock: true },
             'https://b.com': { actuallyBlocked: false, willBlock: false }
-          }
+          },
+          test: 'block',
+          testToggled: false
         },
         3: {
           id: 3,
@@ -673,7 +699,9 @@ describe('shieldsPanelState test', () => {
           noScriptInfo: {
             'https://a.com': { actuallyBlocked: true, willBlock: true },
             'https://b.com': { actuallyBlocked: false, willBlock: false }
-          }
+          },
+          test: 'block',
+          testToggled: false
         }
       },
       windows: {
@@ -708,7 +736,9 @@ describe('shieldsPanelState test', () => {
               noScriptInfo: {
                 'https://a.com': { actuallyBlocked: false, willBlock: true },
                 'https://b.com': { actuallyBlocked: false, willBlock: false }
-              }
+              },
+              test: 'block',
+              testToggled: false
             },
             3: {
               id: 3,
@@ -731,7 +761,9 @@ describe('shieldsPanelState test', () => {
               noScriptInfo: {
                 'https://a.com': { actuallyBlocked: true, willBlock: true },
                 'https://b.com': { actuallyBlocked: false, willBlock: false }
-              }
+              },
+              test: 'block',
+              testToggled: false
             }
           },
           windows: {
@@ -764,7 +796,9 @@ describe('shieldsPanelState test', () => {
               cookies: 'block',
               fingerprintingBlocked: 0,
               url: 'https://brave.com',
-              noScriptInfo: {}
+              noScriptInfo: {},
+              test: 'block',
+              testToggled: false
             },
             3: {
               id: 3,
@@ -787,7 +821,9 @@ describe('shieldsPanelState test', () => {
               noScriptInfo: {
                 'https://a.com': { actuallyBlocked: true, willBlock: true },
                 'https://b.com': { actuallyBlocked: false, willBlock: false }
-              }
+              },
+              test: 'block',
+              testToggled: false
             }
           },
           windows: {

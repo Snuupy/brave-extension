@@ -21,7 +21,8 @@ describe('shieldsPanelActions', () => {
       id: 1,
       javascript: 'allow',
       fingerprinting: 'allow',
-      cookies: 'allow'
+      cookies: 'allow',
+      test: 'block'
     }
     assert.deepEqual(actions.shieldsPanelDataUpdated(details), {
       type: types.SHIELDS_PANEL_DATA_UPDATED,

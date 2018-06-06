@@ -23,6 +23,7 @@ function setup () {
     fingerprinting: 'block',
     cookies: 'block',
     noScriptInfo: {},
+    test: 'block',
     blockAdsTrackers: (setting: BlockOptions) => {
       return {
         type: actionTypes.BLOCK_ADS_TRACKERS,
@@ -43,6 +44,11 @@ function setup () {
     javascriptToggled: () => {
       return {
         type: actionTypes.JAVASCRIPT_TOGGLED
+      }
+    },
+    testToggled: () => {
+      return {
+        type: actionTypes.TEST_TOGGLED
       }
     },
     blockFingerprinting: (setting:BlockFPOptions) => {

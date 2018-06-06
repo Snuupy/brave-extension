@@ -281,6 +281,7 @@ describe('braveShieldsPanelReducer', () => {
         javascript: 'block',
         fingerprinting: 'block',
         cookies: 'block',
+        test: 'block'
       }
       assert.deepEqual(
         shieldsPanelReducer(initialState.shieldsPanel, {
@@ -306,7 +307,8 @@ describe('braveShieldsPanelReducer', () => {
               cookies: 'block',
               controlsOpen: true,
               braveShields: 'allow',
-              noScriptInfo: {}
+              noScriptInfo: {},
+              test: 'block'
             }
           },
           windows: {}
@@ -435,7 +437,9 @@ describe('braveShieldsPanelReducer', () => {
             ads: 'block',
             fingerprinting: 'block',
             cookies: 'block',
-            noScriptInfo: {}
+            noScriptInfo: {},
+            test: 'block',
+            testToggled: false
           }
         },
         windows: {
@@ -1085,7 +1089,9 @@ describe('braveShieldsPanelReducer', () => {
                 actuallyBlocked: true,
                 willBlock: true
               }
-            }
+            },
+            test: 'block',
+            testToggled: false
           }
         },
         windows: {
@@ -1122,7 +1128,9 @@ describe('braveShieldsPanelReducer', () => {
                 actuallyBlocked: true,
                 willBlock: false
               }
-            }
+            },
+            test: 'block',
+            testToggled: false
           }
         },
         windows: {
