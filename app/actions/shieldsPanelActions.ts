@@ -5,12 +5,6 @@
 import * as types from '../constants/shieldsPanelTypes'
 import * as actions from '../types/actions/shieldsPanelActions'
 
-export const testToggled: actions.TestToggled = () => {
-  return {
-    type: types.TEST_TOGGLED
-  }
-}
-
 export const shieldsPanelDataUpdated: actions.ShieldsPanelDataUpdated = (details) => {
   return {
     type: types.SHIELDS_PANEL_DATA_UPDATED,
@@ -55,6 +49,12 @@ export const httpsEverywhereToggled: actions.HttpsEverywhereToggled = () => {
 export const javascriptToggled: actions.JavascriptToggled = () => {
   return {
     type: types.JAVASCRIPT_TOGGLED
+  }
+}
+
+export const testToggled: actions.TestToggled = () => {
+  return {
+    type: types.TEST_TOGGLED
   }
 }
 
