@@ -27,12 +27,12 @@ export const getShieldSettingsForTabData = (tabData?: chrome.tabs.Tab) => {
     chrome.contentSettings.plugins.getAsync({ primaryUrl: origin, resourceIdentifier: { id: resourceIdentifiers.RESOURCE_IDENTIFIER_ADS } }),
     chrome.contentSettings.plugins.getAsync({ primaryUrl: origin, resourceIdentifier: { id: resourceIdentifiers.RESOURCE_IDENTIFIER_TRACKERS } }),
     chrome.contentSettings.plugins.getAsync({ primaryUrl: origin, resourceIdentifier: { id: resourceIdentifiers.RESOURCE_IDENTIFIER_HTTP_UPGRADABLE_RESOURCES } }),
-    chrome.contentSettings.javascript.getAsync({ primaryUrl: origin }),
     chrome.contentSettings.plugins.getAsync({ primaryUrl: origin, resourceIdentifier: { id: resourceIdentifiers.RESOURCE_IDENTIFIER_FINGERPRINTING } }),
     chrome.contentSettings.plugins.getAsync({ primaryUrl: origin, secondaryUrl: 'https://firstParty/*', resourceIdentifier: { id: resourceIdentifiers.RESOURCE_IDENTIFIER_FINGERPRINTING } }),
     chrome.contentSettings.plugins.getAsync({ primaryUrl: origin, resourceIdentifier: { id: resourceIdentifiers.RESOURCE_IDENTIFIER_COOKIES } }),
     chrome.contentSettings.plugins.getAsync({ primaryUrl: origin, secondaryUrl: 'https://firstParty/', resourceIdentifier: { id: resourceIdentifiers.RESOURCE_IDENTIFIER_COOKIES } }),
-    chrome.contentSettings.plugins.getAsync({ primaryUrl: origin, resourceIdentifier: { id: resourceIdentifiers.RESOURCE_TEST } })
+    chrome.contentSettings.plugins.getAsync({ primaryUrl: origin, resourceIdentifier: { id: resourceIdentifiers.RESOURCE_TEST } }),
+    chrome.contentSettings.javascript.getAsync({ primaryUrl: origin })
   ]).then((details) => {
 
     // needs to grab the variables accordingly
@@ -167,7 +167,6 @@ export const setAllowJavaScript = (origin: string, setting: string) =>
 export const setAllowTest = (origin: string, setting: string) =>
   chrome.contentSettings.javascript.setAsync({
     primaryPattern: origin + '/*',
-    resourceIdentifier: { id: resourceIdentifiers.RESOURCE_TEST },
     setting
   })
 
