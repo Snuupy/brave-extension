@@ -172,6 +172,7 @@ export default function shieldsPanelReducer (state: State = { tabs: {}, windows:
     case shieldsPanelTypes.TEST_TOGGLED:
       {
         const tabData: Tab = shieldsPanelState.getActiveTabData(state)
+        // console.log(`current state: ${tabData.origin}, ${toggleShieldsValue(tabData.test)}`);
         setAllowTest(tabData.origin, toggleShieldsValue(tabData.test))
           .then(() => {
             requestShieldPanelData(shieldsPanelState.getActiveTabId(state))
