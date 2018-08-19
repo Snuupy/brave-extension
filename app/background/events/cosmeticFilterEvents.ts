@@ -4,6 +4,7 @@ let rule = {
   host: '',
   selector: ''
 }
+let debug = true
 
 // add context menu
 chrome.runtime.onInstalled.addListener(function () {
@@ -32,6 +33,14 @@ chrome.runtime.onInstalled.addListener(function () {
     parentId: 'brave',
     contexts: ['all']
   })
+  if (debug) {
+    chrome.contextMenus.create({
+      title: 'Log Storage',
+      id: 'logStorage',
+      parentId: 'brave',
+      contexts: ['all']
+    })
+  }
 })
 
 // contextMenu listener - when triggered, grab latest selector
@@ -40,6 +49,9 @@ chrome.contextMenus.onClicked.addListener(function (info, tab) {
     case 'addBlockElement':
       {
         rule.selector = window.prompt('CSS selector to block: ', `${rule.selector}`) || ''
+        if (rule.selector.length === 0) {
+          return
+        }
         chrome.tabs.insertCSS({
           code: `${rule.selector} {display: none;}`
         })
@@ -56,15 +68,40 @@ chrome.contextMenus.onClicked.addListener(function (info, tab) {
         cosmeticFilterActions.allCosmeticFiltersRemoved()
         break
       }
+    case 'logStorage':
+      {
+        cosmeticFilterActions.siteLoggedStorage()
+        break
+      }
     default: {
       console.warn('[cosmeticFilterEvents] invalid context menu option: ${info.menuItemId}')
     }
   }
 })
 
-// content script listener for right click DOM selection event
+// listens to content script events
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-  rule.host = msg.baseURI
-  rule.selector = msg.selector
-  sendResponse(rule)
+  switch (msg.actionType) {
+    case 'contextMenuOpened': // updates rule
+      {
+        rule.host = msg.baseURI
+        rule.selector = msg.selector
+        sendResponse(rule)
+        break
+      }
+    case 'applyFilter':
+      {
+        console.log(`mutation - actionType: ${msg.actionType}`)
+        cosmeticFilterActions.siteCosmeticFilterApplied(msg.url)
+        break
+      }
+    // case 'checkWhitelisted':
+    //   {
+    //     return
+    //   }
+    default: {
+      console.warn(`[cosmeticFilterEvents] invalid content script event: ${msg.actionType}`)
+    }
+  }
+
 })

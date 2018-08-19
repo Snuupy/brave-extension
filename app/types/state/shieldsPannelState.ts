@@ -29,6 +29,9 @@ export interface Tab {
   httpsRedirectedResources: Array<string>
   javascriptBlockedResources: Array<string>
   fingerprintingBlockedResources: Array<string>
+  appliedFilterList: {
+    (filter: string): Boolean
+  }
 }
 
 export interface Tabs {

@@ -19,7 +19,8 @@ import {
   removeSiteFilter,
   addSiteCosmeticFilter,
   applySiteFilters,
-  removeAllFilters
+  removeAllFilters,
+  logStorage
 } from '../api/cosmeticFilterAPI'
 
 const focusedWindowChanged = (state: State, windowId: number): State => {
@@ -56,7 +57,9 @@ export default function cosmeticFilterReducer (state: State = {
     case webNavigationTypes.ON_COMMITTED:
       {
         const tabData: Tab = shieldsPanelState.getActiveTabData(state)
-        applySiteFilters(tabData.hostname)
+        const tabId: number = shieldsPanelState.getActiveTabId(state)
+        console.log('applySiteFilters called')
+        applySiteFilters(tabData, tabId)
         break
       }
     case windowTypes.WINDOW_REMOVED:
@@ -131,7 +134,7 @@ export default function cosmeticFilterReducer (state: State = {
       }
     case cosmeticFilterTypes.SITE_COSMETIC_FILTER_REMOVED:
       {
-        let url = action.origin
+        let url = action.hostname
         removeSiteFilter(url)
         break
       }
@@ -142,12 +145,38 @@ export default function cosmeticFilterReducer (state: State = {
       }
     case cosmeticFilterTypes.SITE_COSMETIC_FILTER_ADDED:
       {
-        addSiteCosmeticFilter(action.origin, action.cssfilter)
+        const tabData: Tab = shieldsPanelState.getActiveTabData(state)
+        const tabId: number = shieldsPanelState.getActiveTabId(state)
+        addSiteCosmeticFilter(tabData.hostname, action.cssfilter)
+        .then(() => {
+          console.log(`added: ${tabData.hostname} | ${action.cssfilter}`)
+        })
         .catch((e) => {
           console.error('Could not add filter:', e)
         })
+        applySiteFilters(tabData, tabId)
         break
       }
+    case cosmeticFilterTypes.SITE_COSMETIC_FILTER_APPLIED:
+      {
+        const tabData: Tab = shieldsPanelState.getActiveTabData(state)
+        const tabId: number = shieldsPanelState.getActiveTabId(state)
+        // let updatedFilterList = applySiteFilters(tabData, tabId)
+        applySiteFilters(tabData, tabId)
+        // shieldsPanelState.updateTabShieldsData(state, tabId, { appliedFilterList: updatedFilterList })
+        break
+      }
+    case cosmeticFilterTypes.SITE_LOGGED_STORAGE:
+      {
+        const tabData: Tab = shieldsPanelState.getActiveTabData(state)
+        console.log(`hostname: ${tabData.hostname}`)
+        logStorage(tabData.hostname)
+        break
+      }
+    // case cosmeticFilterTypes.SITE_LOGGED_TAB_DATA:
+    //   {
+    //     const tabData:
+    //   }
   }
   return state
 }
