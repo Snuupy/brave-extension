@@ -4,7 +4,7 @@ let rule = {
   host: '',
   selector: ''
 }
-let debug = true
+// let debug = true
 
 // parent menu
 chrome.contextMenus.create({
