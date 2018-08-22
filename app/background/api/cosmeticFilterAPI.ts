@@ -1,17 +1,10 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
-<<<<<<< Updated upstream
 * License, v. 2.0. If a copy of the MPL was not distributed with this file,
 * You can obtain one at http://mozilla.org/MPL/2.0/. */
 import { Tab } from '../../types/state/shieldsPannelState'
 // import * as shieldsPanelState from '../../state/shieldsPanelState'
 let addedNodeList = NodeList
 console.log(addedNodeList)
-=======
- * License, v. 2.0. If a copy of the MPL was not distributed with this file,
- * You can obtain one at http://mozilla.org/MPL/2.0/. */
-import { Tab } from '../../types/state/shieldsPannelState'
-// import * as shieldsPanelState from '../../state/shieldsPanelState'
->>>>>>> Stashed changes
 
 export const addSiteCosmeticFilter = async (hostname: string, cssfilter: string) => {
   chrome.storage.local.get('cosmeticFilterList', (storeData = {}) => {
@@ -78,12 +71,6 @@ export const removeAllFilters = () => {
 
 export const logStorage = (hostname: string) => {
   chrome.storage.local.get('cosmeticFilterList', (storeData = {}) => {
-<<<<<<< Updated upstream
     console.log(`cosmeticFilterList for ${hostname}:`, storeData.cosmeticFilterList[hostname])
-=======
-    if (storeData.cosmeticFilterList[hostname] !== undefined) {
-      console.log(`cosmeticFilterList for ${hostname}:`, storeData.cosmeticFilterList[hostname])
-    }
->>>>>>> Stashed changes
   })
 }
