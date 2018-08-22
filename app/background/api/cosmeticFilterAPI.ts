@@ -1,6 +1,6 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this file,
- * You can obtain one at http://mozilla.org/MPL/2.0/. */
+* License, v. 2.0. If a copy of the MPL was not distributed with this file,
+* You can obtain one at http://mozilla.org/MPL/2.0/. */
 import { Tab } from '../../types/state/shieldsPannelState'
 // import * as shieldsPanelState from '../../state/shieldsPanelState'
 let addedNodeList = NodeList
@@ -38,22 +38,19 @@ export const applySiteFilters = (tabData: Tab, tabId: number) => {
       //   runAt: 'document_start'
       // }) // this works, disabled for the purpose of testing the generic cosmetic filter
       // if (document.querySelector('${filter}')) {
-
         chrome.tabs.executeScript({
           // this is executed in the content script context
           code: `
-        (function () {
-          let filter = '${filter}'
-          console.log('APPLYING SITE FILTERS:', filter)
-          addedNodeList = document.querySelectorAll(filter)
-          addedNodeList.forEach((element, currentIndex = 0) => {
-            if (element) {
-              element.remove()
-              console.log(${filter} applied)
-            }
-          })
-        })()
-        `
+          (function () {
+            let filter = '${filter}'
+            console.log('APPLYING SITE FILTERS:', filter)
+            addedNodeList = document.querySelectorAll(filter)
+            if (addedNodeList.length > 0) {
+              addedNodeList.forEach((element, currentIndex = 0) => {
+                element.remove()
+              })
+          	}})()
+          `
         })
       // console.log(`${filter} removed`)
       // updatedFilterList.appliedFilterList[filter] = true
@@ -66,7 +63,6 @@ export const applySiteFilters = (tabData: Tab, tabId: number) => {
 // let newAppliedFilterList = Object.assign(tabData.appliedFilterList)
 // appliedFilterList[filter] = true
 // applySiteFilters(tabData.hostname, tabData) // apply filter, update state to store filter that was just blocked
-
 }
 
 export const removeAllFilters = () => {
