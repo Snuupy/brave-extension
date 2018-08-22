@@ -6,41 +6,30 @@ let rule = {
 }
 let debug = true
 
-// add context menu
-chrome.runtime.onInstalled.addListener(function () {
-  // parent menu
-  chrome.contextMenus.create({
-    title: 'Brave',
-    id: 'brave',
-    contexts: ['all']
-  })
-  // block ad child menu
-  chrome.contextMenus.create({
-    title: 'Block element via selector',
-    id: 'addBlockElement',
-    parentId: 'brave',
-    contexts: ['all']
-  })
-  chrome.contextMenus.create({
-    title: 'Clear CSS rules for this site',
-    id: 'resetSiteFilterSettings',
-    parentId: 'brave',
-    contexts: ['all']
-  })
-  chrome.contextMenus.create({
-    title: 'Clear CSS rules for all sites',
-    id: 'resetAllFilterSettings',
-    parentId: 'brave',
-    contexts: ['all']
-  })
-  if (debug) {
-    chrome.contextMenus.create({
-      title: 'Log Storage',
-      id: 'logStorage',
-      parentId: 'brave',
-      contexts: ['all']
-    })
-  }
+// parent menu
+chrome.contextMenus.create({
+  title: 'Brave',
+  id: 'brave',
+  contexts: ['all']
+})
+// block ad child menu
+chrome.contextMenus.create({
+  title: 'Block element via selector',
+  id: 'addBlockElement',
+  parentId: 'brave',
+  contexts: ['all']
+})
+chrome.contextMenus.create({
+  title: 'Clear CSS rules for this site',
+  id: 'resetSiteFilterSettings',
+  parentId: 'brave',
+  contexts: ['all']
+})
+chrome.contextMenus.create({
+  title: 'Clear CSS rules for all sites',
+  id: 'resetAllFilterSettings',
+  parentId: 'brave',
+  contexts: ['all']
 })
 
 // contextMenu listener - when triggered, grab latest selector

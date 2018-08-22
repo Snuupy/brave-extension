@@ -39,19 +39,19 @@ export const applySiteFilters = (tabData: Tab, tabId: number) => {
       // }) // this works, disabled for the purpose of testing the generic cosmetic filter
       // if (document.querySelector('${filter}')) {
 
-        chrome.tabs.executeScript({ // this is executed in the content script context
+        chrome.tabs.executeScript({
+          // this is executed in the content script context
           code: `
-        // console.log('$ filter}')
         (function () {
           let filter = '${filter}'
           console.log('APPLYING SITE FILTERS:', filter)
           addedNodeList = document.querySelectorAll(filter)
           addedNodeList.forEach((element, currentIndex = 0) => {
-            element.remove()
-            console.log(element, filter)
+            if (element) {
+              element.remove()
+              console.log(${filter} applied)
+            }
           })
-          console.log(addedNodeList)
-          // console.log('removing', filter)
         })()
         `
         })
