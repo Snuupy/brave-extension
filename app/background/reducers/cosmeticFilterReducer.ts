@@ -18,7 +18,8 @@ import * as cosmeticFilterTypes from '../../constants/cosmeticFilterTypes'
 import {
   removeSiteFilter,
   addSiteCosmeticFilter,
-  applySiteFilters,
+  applyDOMCosmeticFilters,
+  applyCSSCosmeticFilters,
   removeAllFilters,
   logStorage
 } from '../api/cosmeticFilterAPI'
@@ -46,137 +47,128 @@ export default function cosmeticFilterReducer (state: State = {
   currentWindowId: -1 },
   action: Actions) {
   switch (action.type) {
-    case webNavigationTypes.ON_BEFORE_NAVIGATION:
-      {
-        if (action.isMainFrame) {
-          state = shieldsPanelState.resetBlockingStats(state, action.tabId)
-          state = shieldsPanelState.resetNoScriptInfo(state, action.tabId, new window.URL(action.url).origin)
-        }
+    case webNavigationTypes.ON_BEFORE_NAVIGATION: {
+      if (action.isMainFrame) {
+        state = shieldsPanelState.resetBlockingStats(state, action.tabId)
+        state = shieldsPanelState.resetNoScriptInfo(state, action.tabId, new window.URL(action.url).origin)
+      }
+      break
+    }
+    case webNavigationTypes.ON_COMMITTED: {
+      const tabData: Tab = shieldsPanelState.getActiveTabData(state)
+      const tabId: number = shieldsPanelState.getActiveTabId(state)
+      console.log('applySiteFilters called')
+      applyCSSCosmeticFilters(tabData, tabId)
+      break
+    }
+    case windowTypes.WINDOW_REMOVED: {
+      state = shieldsPanelState.removeWindowInfo(state, action.windowId)
+      break
+    }
+    case windowTypes.WINDOW_CREATED: {
+      if (action.window.focused || Object.keys(state.windows).length === 0) {
+        state = focusedWindowChanged(state, action.window.id)
+      }
+      break
+    }
+    case windowTypes.WINDOW_FOCUS_CHANGED: {
+      state = focusedWindowChanged(state, action.windowId)
+      break
+    }
+    case tabTypes.ACTIVE_TAB_CHANGED: {
+      const windowId: number = action.windowId
+      const tabId: number = action.tabId
+      state = updateActiveTab(state, windowId, tabId)
+      break
+    }
+    case tabTypes.TAB_DATA_CHANGED: {
+      const tab: chrome.tabs.Tab = action.tab
+      if (tab.active && tab.id) {
+        state = updateActiveTab(state, tab.windowId, tab.id)
+      }
+      break
+    }
+    case tabTypes.TAB_CREATED: {
+      const tab: chrome.tabs.Tab = action.tab
+      if (!tab) {
         break
       }
-    case webNavigationTypes.ON_COMMITTED:
-      {
-        const tabData: Tab = shieldsPanelState.getActiveTabData(state)
-        const tabId: number = shieldsPanelState.getActiveTabId(state)
-        console.log('applySiteFilters called')
-        applySiteFilters(tabData, tabId)
-        break
-      }
-    case windowTypes.WINDOW_REMOVED:
-      {
-        state = shieldsPanelState.removeWindowInfo(state, action.windowId)
-        break
-      }
-    case windowTypes.WINDOW_CREATED:
-      {
-        if (action.window.focused || Object.keys(state.windows).length === 0) {
-          state = focusedWindowChanged(state, action.window.id)
-        }
-        break
-      }
-    case windowTypes.WINDOW_FOCUS_CHANGED:
-      {
-        state = focusedWindowChanged(state, action.windowId)
-        break
-      }
-    case tabTypes.ACTIVE_TAB_CHANGED:
-      {
-        const windowId: number = action.windowId
-        const tabId: number = action.tabId
-        state = updateActiveTab(state, windowId, tabId)
-        break
-      }
-    case tabTypes.TAB_DATA_CHANGED:
-      {
-        const tab: chrome.tabs.Tab = action.tab
-        if (tab.active && tab.id) {
-          state = updateActiveTab(state, tab.windowId, tab.id)
-        }
-        break
-      }
-    case tabTypes.TAB_CREATED:
-      {
-        const tab: chrome.tabs.Tab = action.tab
-        if (!tab) {
-          break
-        }
 
-        if (tab.active && tab.id) {
-          state = updateActiveTab(state, tab.windowId, tab.id)
-        }
+      if (tab.active && tab.id) {
+        state = updateActiveTab(state, tab.windowId, tab.id)
+      }
+      break
+    }
+    case shieldsPanelTypes.SHIELDS_PANEL_DATA_UPDATED: {
+      state = shieldsPanelState.updateTabShieldsData(state, action.details.id, action.details)
+      break
+    }
+    case shieldsPanelTypes.SHIELDS_TOGGLED: {
+      const tabId: number = shieldsPanelState.getActiveTabId(state)
+      const tabData: Tab = shieldsPanelState.getActiveTabData(state)
+      if (!tabData) {
         break
       }
-    case shieldsPanelTypes.SHIELDS_PANEL_DATA_UPDATED:
-      {
-        state = shieldsPanelState.updateTabShieldsData(state, action.details.id, action.details)
-        break
-      }
-    case shieldsPanelTypes.SHIELDS_TOGGLED:
-      {
-        const tabId: number = shieldsPanelState.getActiveTabId(state)
-        const tabData: Tab = shieldsPanelState.getActiveTabData(state)
-        if (!tabData) {
-          break
-        }
-        setAllowBraveShields(tabData.origin, action.setting)
-          .then(() => {
-            reloadTab(tabId, true).catch((e) => {
-              console.error('Tab reload was not successful', e)
-            })
-            requestShieldPanelData(shieldsPanelState.getActiveTabId(state))
+      setAllowBraveShields(tabData.origin, action.setting)
+        .then(() => {
+          reloadTab(tabId, true).catch(e => {
+            console.error('Tab reload was not successful', e)
           })
-          .catch((e: any) => {
-            console.error('Could not set shields', e)
-          })
-        state = shieldsPanelState
-          .updateTabShieldsData(state, tabId, { braveShields: action.setting })
-        break
-      }
-    case cosmeticFilterTypes.SITE_COSMETIC_FILTER_REMOVED:
-      {
-        let url = action.hostname
-        removeSiteFilter(url)
-        break
-      }
-    case cosmeticFilterTypes.ALL_COSMETIC_FILTERS_REMOVED:
-      {
-        removeAllFilters()
-        break
-      }
-    case cosmeticFilterTypes.SITE_COSMETIC_FILTER_ADDED:
-      {
-        const tabData: Tab = shieldsPanelState.getActiveTabData(state)
-        const tabId: number = shieldsPanelState.getActiveTabId(state)
-        addSiteCosmeticFilter(tabData.hostname, action.cssfilter)
+          requestShieldPanelData(shieldsPanelState.getActiveTabId(state))
+        })
+        .catch((e: any) => {
+          console.error('Could not set shields', e)
+        })
+      state = shieldsPanelState.updateTabShieldsData(state, tabId, {
+        braveShields: action.setting
+      })
+      break
+    }
+    case cosmeticFilterTypes.SITE_COSMETIC_FILTER_REMOVED: {
+      let url = action.hostname
+      removeSiteFilter(url)
+      break
+    }
+    case cosmeticFilterTypes.ALL_COSMETIC_FILTERS_REMOVED: {
+      removeAllFilters()
+      break
+    }
+    case cosmeticFilterTypes.SITE_COSMETIC_FILTER_ADDED: {
+      const tabData: Tab = shieldsPanelState.getActiveTabData(state)
+      const tabId: number = shieldsPanelState.getActiveTabId(state)
+      addSiteCosmeticFilter(tabData.hostname, action.cssfilter)
         .then(() => {
           console.log(`added: ${tabData.hostname} | ${action.cssfilter}`)
         })
-        .catch((e) => {
+        .catch(e => {
           console.error('Could not add filter:', e)
         })
-        applySiteFilters(tabData, tabId)
-        break
-      }
-    case cosmeticFilterTypes.SITE_COSMETIC_FILTER_APPLIED:
-      {
-        const tabData: Tab = shieldsPanelState.getActiveTabData(state)
-        const tabId: number = shieldsPanelState.getActiveTabId(state)
-        // let updatedFilterList = applySiteFilters(tabData, tabId)
-        applySiteFilters(tabData, tabId)
-        // shieldsPanelState.updateTabShieldsData(state, tabId, { appliedFilterList: updatedFilterList })
-        break
-      }
-    case cosmeticFilterTypes.SITE_LOGGED_STORAGE:
-      {
-        const tabData: Tab = shieldsPanelState.getActiveTabData(state)
-        console.log(`hostname: ${tabData.hostname}`)
-        logStorage(tabData.hostname)
-        break
-      }
-    // case cosmeticFilterTypes.SITE_LOGGED_TAB_DATA:
-    //   {
-    //     const tabData:
-    //   }
+      applyCSSCosmeticFilters(tabData, tabId)
+      applyDOMCosmeticFilters(tabData, tabId)
+      break
+    }
+    case cosmeticFilterTypes.SITE_DOM_COSMETIC_FILTER_APPLIED: {
+      const tabData: Tab = shieldsPanelState.getActiveTabData(state)
+      const tabId: number = shieldsPanelState.getActiveTabId(state)
+      // let updatedFilterList = applySiteFilters(tabData, tabId)
+      applyDOMCosmeticFilters(tabData, tabId)
+      // shieldsPanelState.updateTabShieldsData(state, tabId, { appliedFilterList: updatedFilterList })
+      break
+    }
+    case cosmeticFilterTypes.SITE_CSS_COSMETIC_FILTER_APPLIED: {
+      const tabData: Tab = shieldsPanelState.getActiveTabData(state)
+      const tabId: number = shieldsPanelState.getActiveTabId(state)
+      // let updatedFilterList = applySiteFilters(tabData, tabId)
+      applyCSSCosmeticFilters(tabData, tabId)
+      // shieldsPanelState.updateTabShieldsData(state, tabId, { appliedFilterList: updatedFilterList })
+      break
+    }
+    case cosmeticFilterTypes.SITE_LOGGED_STORAGE: {
+      const tabData: Tab = shieldsPanelState.getActiveTabData(state)
+      console.log(`hostname: ${tabData.hostname}`)
+      logStorage(tabData.hostname)
+      break
+    }
   }
   return state
 }

@@ -31,13 +31,22 @@ export interface AllCosmeticFiltersRemoved {
   (): AllCosmeticFiltersRemovedReturn
 }
 
-interface SiteCosmeticFilterAppliedReturn {
-  type: types.SITE_COSMETIC_FILTER_APPLIED,
+interface SiteCSSCosmeticFilterAppliedReturn {
+  type: types.SITE_CSS_COSMETIC_FILTER_APPLIED,
   hostname: string
 }
 
-export interface SiteCosmeticFilterApplied {
-  (hostname: string): SiteCosmeticFilterAppliedReturn
+export interface SiteCSSCosmeticFilterApplied {
+  (hostname: string): SiteCSSCosmeticFilterAppliedReturn
+}
+
+interface SiteDOMCosmeticFilterAppliedReturn {
+  type: types.SITE_DOM_COSMETIC_FILTER_APPLIED,
+  hostname: string
+}
+
+export interface SiteDOMCosmeticFilterApplied {
+  (hostname: string): SiteDOMCosmeticFilterAppliedReturn
 }
 
 interface SiteLoggedStorageReturn {
@@ -52,5 +61,6 @@ export type cosmeticFilterActions =
   SiteCosmeticFilterRemovedReturn |
   SiteCosmeticFilterAddedReturn |
   AllCosmeticFiltersRemovedReturn |
-  SiteCosmeticFilterAppliedReturn |
+  SiteCSSCosmeticFilterAppliedReturn |
+  SiteDOMCosmeticFilterAppliedReturn |
   SiteLoggedStorageReturn

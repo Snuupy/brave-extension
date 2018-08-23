@@ -26,9 +26,15 @@ export const allCosmeticFiltersRemoved: actions.AllCosmeticFiltersRemoved = () =
   }
 }
 
-export const siteCosmeticFilterApplied: actions.SiteCosmeticFilterApplied = (hostname: string) => {
+export const siteCSSCosmeticFilterApplied: actions.SiteCSSCosmeticFilterApplied = (hostname: string) => {
   return {
-    type: types.SITE_COSMETIC_FILTER_APPLIED,
+    type: types.SITE_CSS_COSMETIC_FILTER_APPLIED,
+    hostname
+  }
+}
+export const siteDOMCosmeticFilterApplied: actions.SiteDOMCosmeticFilterApplied = (hostname: string) => {
+  return {
+    type: types.SITE_DOM_COSMETIC_FILTER_APPLIED,
     hostname
   }
 }

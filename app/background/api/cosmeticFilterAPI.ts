@@ -3,8 +3,6 @@
 * You can obtain one at http://mozilla.org/MPL/2.0/. */
 import { Tab } from '../../types/state/shieldsPannelState'
 // import * as shieldsPanelState from '../../state/shieldsPanelState'
-let addedNodeList = NodeList
-console.log(addedNodeList)
 
 export const addSiteCosmeticFilter = async (hostname: string, cssfilter: string) => {
   chrome.storage.local.get('cosmeticFilterList', (storeData = {}) => {
@@ -26,28 +24,24 @@ export const removeSiteFilter = (hostname: string) => {
   })
 }
 
-export const applySiteFilters = (tabData: Tab, tabId: number) => {
+export const applyDOMCosmeticFilters = (tabData: Tab, tabId: number) => {
   let hostname = tabData.hostname
   // let updatedFilterList = Object.assign(tabData.appliedFilterList)
   chrome.storage.local.get('cosmeticFilterList', (storeData = {}) => { // fetch filter list
     if (storeData.cosmeticFilterList[hostname] !== undefined) {
       storeData.cosmeticFilterList[hostname].map((filter: string) => { // if the filter hasn't been applied once before, apply it and set the corresponding filter to true
-      // if (!tabData.appliedFilterList[filter]) {
-      // chrome.tabs.insertCSS({
-      //   code: `${filter} {display: none;}`,
-      //   runAt: 'document_start'
-      // }) // this works, disabled for the purpose of testing the generic cosmetic filter
-      // if (document.querySelector('${filter}')) {
         chrome.tabs.executeScript({
           // this is executed in the content script context
           code: `
           (function () {
             let filter = '${filter}'
-            console.log('APPLYING SITE FILTERS:', filter)
+            let addedNodeList = NodeList
             addedNodeList = document.querySelectorAll(filter)
+            console.log('${filter} exists:', addedNodeList.length > 0)
             if (addedNodeList.length > 0) {
               addedNodeList.forEach((element, currentIndex = 0) => {
                 element.remove()
+                console.log('${filter} removed')
               })
           	}})()
           `
@@ -65,12 +59,28 @@ export const applySiteFilters = (tabData: Tab, tabId: number) => {
 // applySiteFilters(tabData.hostname, tabData) // apply filter, update state to store filter that was just blocked
 }
 
+export const applyCSSCosmeticFilters = (tabData: Tab, tabId: number) => {
+  let hostname = tabData.hostname
+  // let updatedFilterList = Object.assign(tabData.appliedFilterList)
+  chrome.storage.local.get('cosmeticFilterList', (storeData = {}) => { // fetch filter list
+    if (storeData.cosmeticFilterList[hostname] !== undefined) {
+      storeData.cosmeticFilterList[hostname].map((filter: string) => { // if the filter hasn't been applied once before, apply it and set the corresponding filter to true
+        chrome.tabs.insertCSS({
+          code: `${filter} {display: none;}`,
+          runAt: 'document_start'
+        })
+      })
+    }
+  })
+}
+
 export const removeAllFilters = () => {
   chrome.storage.local.set({ 'cosmeticFilterList': {} })
 }
 
 export const logStorage = (hostname: string) => {
   chrome.storage.local.get('cosmeticFilterList', (storeData = {}) => {
-    console.log(`cosmeticFilterList for ${hostname}:`, storeData.cosmeticFilterList[hostname])
+    // console.log(`cosmeticFilterList for ${hostname}:`, storeData.cosmeticFilterList[hostname])
+    console.log(`cosmeticFilterList:`, storeData.cosmeticFilterList)
   })
 }

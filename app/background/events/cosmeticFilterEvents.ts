@@ -4,7 +4,7 @@ let rule = {
   host: '',
   selector: ''
 }
-// let debug = true
+let debug = true
 
 // parent menu
 chrome.contextMenus.create({
@@ -31,6 +31,14 @@ chrome.contextMenus.create({
   parentId: 'brave',
   contexts: ['all']
 })
+if (debug === true) {
+  chrome.contextMenus.create({
+    title: 'Log storage',
+    id: 'logStorage',
+    parentId: 'brave',
+    contexts: ['all']
+  })
+}
 
 // contextMenu listener - when triggered, grab latest selector
 chrome.contextMenus.onClicked.addListener(function (info, tab) {
@@ -78,10 +86,10 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         sendResponse(rule)
         break
       }
-    case 'applyFilter':
+    case 'applyDOMCosmeticFilter':
       {
-        console.log(`mutation - actionType: ${msg.actionType}`)
-        cosmeticFilterActions.siteCosmeticFilterApplied(msg.url)
+        // console.log(`mutation - actionType: ${msg.actionType}`)
+        cosmeticFilterActions.siteDOMCosmeticFilterApplied(msg.url)
         break
       }
     // case 'checkWhitelisted':
