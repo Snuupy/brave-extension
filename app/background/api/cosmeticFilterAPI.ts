@@ -69,9 +69,21 @@ export const applyCSSCosmeticFilters = (tabData: Tab, tabId: number) => {
           code: `${filter} {display: none;}`,
           runAt: 'document_start'
         })
+
+        console.log('removing', filter)
+
+          // console.log(`${filter} removed`)
+          // updatedFilterList.appliedFilterList[filter] = true
+          // console.log(updatedFilterList)
+        // }
       })
     }
   })
+  // return updatedFilterList
+  // let newAppliedFilterList = Object.assign(tabData.appliedFilterList)
+  // appliedFilterList[filter] = true
+  // applySiteFilters(tabData.hostname, tabData) // apply filter, update state to store filter that was just blocked
+
 }
 
 export const removeAllFilters = () => {

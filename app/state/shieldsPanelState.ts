@@ -46,7 +46,8 @@ export const updateTabShieldsData: shieldState.UpdateTabShieldsData = (state, ta
     httpsRedirectedResources: [],
     javascriptBlockedResources: [],
     fingerprintingBlockedResources: [],
-    appliedFilterList: {}
+    appliedFilterList: {
+    }
   },
     ...tabs[tabId],
     ...details
