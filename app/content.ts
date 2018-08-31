@@ -13,16 +13,19 @@ let pageIsWhitelisted = false
 //   // return res.whitelisted
 //   return false
 // })
-
-document.addEventListener('contextmenu', (event) => {
-  let selector = unique(event.target) // this has to be done here, events can't be passed through the messaging API
-  let baseURI = getCurrentURL()
-  chrome.runtime.sendMessage({
-    actionType: 'contextMenuOpened',
-    selector: selector,
-    baseURI: baseURI
-  })
-}, true)
+document.addEventListener(
+  'contextmenu',
+  event => {
+    let selector = unique(event.target) // this has to be done here, events can't be passed through the messaging API
+    let baseURI = getCurrentURL()
+    chrome.runtime.sendMessage({
+      actionType: 'contextMenuOpened',
+      selector: selector,
+      baseURI: baseURI
+    })
+  },
+  true
+)
 
 if (!pageIsWhitelisted) {
   let targetNode = document.documentElement
@@ -31,9 +34,18 @@ if (!pageIsWhitelisted) {
   observer.observe(targetNode, config)
 }
 
+let port = chrome.runtime.connect({ name: 'cosmeticFilter' })
+port.postMessage({ joke: 'Knock knock' })
+port.onMessage.addListener(function (msg) {
+  if (msg.question === "Who's there?") {
+    port.postMessage({ answer: 'Madame' })
+  } else if (msg.question === 'Madame who?') {
+    port.postMessage({ answer: 'Madame... Bovary' })
+  }
+})
+
 // // mutationRecord.removedNodes
 function mutationHandler (mutationRecords: any) {
-  // test
   // console.log('mutation observed')
   // if any mutation record added has a node that was added, or if any attributes were modified, run the filter list on the page
   let applyFilter = false

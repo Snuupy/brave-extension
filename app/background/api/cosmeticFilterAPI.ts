@@ -28,6 +28,10 @@ export const applyDOMCosmeticFilters = (tabData: Tab, tabId: number) => {
   let hostname = tabData.hostname
   // let updatedFilterList = Object.assign(tabData.appliedFilterList)
   chrome.storage.local.get('cosmeticFilterList', (storeData = {}) => { // fetch filter list
+    if (!storeData.cosmeticFilterList) {
+      console.info('applySiteFilters: no cosmetic filter store yet')
+      return
+    }
     if (storeData.cosmeticFilterList[hostname] !== undefined) {
       storeData.cosmeticFilterList[hostname].map((filter: string) => { // if the filter hasn't been applied once before, apply it and set the corresponding filter to true
         chrome.tabs.executeScript({
@@ -59,23 +63,20 @@ export const applyDOMCosmeticFilters = (tabData: Tab, tabId: number) => {
 // applySiteFilters(tabData.hostname, tabData) // apply filter, update state to store filter that was just blocked
 }
 
-export const applyCSSCosmeticFilters = (tabData: Tab, tabId: number) => {
-  let hostname = tabData.hostname
   // let updatedFilterList = Object.assign(tabData.appliedFilterList)
+export const applyCSSCosmeticFilters = (tabData: Tab, tabId: number) => {
   chrome.storage.local.get('cosmeticFilterList', (storeData = {}) => { // fetch filter list
+    if (!storeData.cosmeticFilterList) {
+      console.info('applySiteFilters: no cosmetic filter store yet')
+      return
+    }
+    let hostname = tabData.hostname
     if (storeData.cosmeticFilterList[hostname] !== undefined) {
       storeData.cosmeticFilterList[hostname].map((filter: string) => { // if the filter hasn't been applied once before, apply it and set the corresponding filter to true
         chrome.tabs.insertCSS({
           code: `${filter} {display: none;}`,
           runAt: 'document_start'
         })
-
-        console.log('removing', filter)
-
-          // console.log(`${filter} removed`)
-          // updatedFilterList.appliedFilterList[filter] = true
-          // console.log(updatedFilterList)
-        // }
       })
     }
   })
